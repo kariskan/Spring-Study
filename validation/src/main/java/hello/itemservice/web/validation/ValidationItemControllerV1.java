@@ -43,7 +43,7 @@ public class ValidationItemControllerV1 {
     }
 
     @PostMapping("/add")
-    public String addItemV1(@ModelAttribute Item item, RedirectAttributes redirectAttributes, Model model) {
+    public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttributes, Model model) {
 
         //검증 오류 결과를 보관
         Map<String, String> errors = new HashMap<>();
