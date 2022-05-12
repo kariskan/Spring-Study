@@ -46,8 +46,9 @@ class MemberServiceTest {
         memberService.join(member1);
 
         //then
+
         assertThatThrownBy(() -> memberService.join(member2))
-                .isEqualTo(new IllegalStateException("이미 존재하는 회원입니다."));
+                .isInstanceOf(IllegalStateException.class);
 
     }
 
