@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 import jpabook.jpashop.domain.Address;
 import lombok.Getter;
