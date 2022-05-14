@@ -30,6 +30,7 @@ public class OrderRepository {
      * 동적 쿼리
      * orderSearch 에 값이 없으면 all find
      * 그게 아니라면 쿼리에 맞는 부분만 find
+     *
      * @param orderSearch
      * @return
      */
@@ -45,6 +46,7 @@ public class OrderRepository {
 
     /**
      * JPA Criteria
+     *
      * @param orderSearch
      * @return
      */
@@ -70,5 +72,23 @@ public class OrderRepository {
         cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery() {
+        //페치 조인
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+        return em.createQuery(
+                        "select new jpabook.jpashop.repository.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, d.address) " +
+                                " from Order o" +
+                                " join o.member m" +
+                                " join o.delivery d", OrderSimpleQueryDto.class)
+                .getResultList();
     }
 }
