@@ -33,8 +33,8 @@ public class TeamJpaRepository {
         return Optional.ofNullable(team);
     }
 
-    public Long count() {
-        return em.createQuery("select count(t) from Team t", Long.class)
+    public long count() {
+        return em.createQuery("select count(t) from Team t", long.class)
                 .getSingleResult();
     }
 
