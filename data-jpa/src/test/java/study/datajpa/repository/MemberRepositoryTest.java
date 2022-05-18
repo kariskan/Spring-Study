@@ -262,4 +262,9 @@ class MemberRepositoryTest {
         List<Member> member11 = memberRepository.findListByUsername("member1");
     }
 
+    @Test
+    public void callCustom() throws Exception {
+        List<Member> result = memberRepository.findMemberCustom();
+
+    }
 }
