@@ -99,6 +99,39 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     @Override
     public Page<MemberTeamDto> searchPageComplex(MemberSearchCondition condition, Pageable pageable) {
-        return null;
+        List<MemberTeamDto> results = queryFactory
+                .select(new QMemberTeamDto(
+                        member.id.as("memberId"),
+                        member.username,
+                        member.age,
+                        team.id.as("teamId"),
+                        team.name.as("teamName")
+                ))
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(member.count())
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                );
+
+        System.out.println("countQuery.fetchOne() = " + countQuery.fetchOne());
+
+        return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }
 }
